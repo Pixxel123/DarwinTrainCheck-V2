@@ -16,16 +16,29 @@ data1 = json.loads(source1) # TTH -> ECR journey loaded as dict
 data2 = json.loads(source2) # ECR -> WHS journey
 # WHS -> TTH rsid: SN324200
 # TODO: Use rsid value to return same journey information
-# print(json.dumps(data1, indent=2))
+print(json.dumps(data1, indent=2))
 
 
 print('Departure Station: ' + str(data1.get('crs')))
 print('Arrival Station: ' + str(data1.get('filtercrs')))
 
-for i in range(0,len(data1['trainServices'])):
-      print(data1['trainServices'][i]['rsid'])
-      print('Scheduled arrival time: ' + str(data1['trainServices'][i]['sta']))
-      print('Actual arrival time: ' + str(data1['trainServices'][i]['eta']))
-      print('Status: ' + str(data1['trainServices'][i]['etd']))
+try:
+    for i in range(0,len(data1['trainServices'])):
+        print(data1['trainServices'][i]['rsid'])
+        print('Scheduled arrival time: ' + str(data1['trainServices'][i]['sta']))
+        print('Actual arrival time: ' + str(data1['trainServices'][i]['eta']))
+        print('Status: ' + str(data1['trainServices'][i]['etd']))
+except TypeError:
+    print('There is no data')
+try:
+    print('\nNRCC Messages: ' + str(data1['nrccMessages'][0]['value']))
+except TypeError:
+    print('There is no data')
 
-print('\nNRCC Messages: ' + str(data1['nrccMessages'][0]['value']))
+# origin is a list, not a dict
+# for item in data1:
+    # for data_item in item['data1']:
+        # print(data_item['rsid'])
+
+# user_risd = 'SN326500'
+
