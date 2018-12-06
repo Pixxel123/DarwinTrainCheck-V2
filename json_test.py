@@ -8,7 +8,7 @@ arr_station = 'tth'
 
 time1 = ('1653,1733')
 
-userTime = ['1653','1733']
+userTime = ['2103','2133']
 
 try:
     with urlopen("https://huxley.apphb.com/all/" + dep_station + "/to/" + arr_station + "/" + str(time1) + "?accessToken=" + jsonToken) as response:
@@ -34,8 +34,7 @@ try:
     for i in range(0, len(data1['trainServices'])):
         print('Service RSID: ' + str(data1['trainServices'][i]['rsid']))
         print('Scheduled arrival time: ' + str(data1['trainServices'][i]['sta']))
-        for item in userTime:
-        # if data1['trainServices'][i]['sta'] == '17:33':
+        if data1['trainServices'][i]['sta'].replace(':', '') in userTime:  # replaces sta time with values in userTime
             print('Service ID: ' + str(data1['trainServices'][i]['serviceID']))
             print(data1['trainServices'][i]['adhocAlerts'])
         print('Actual arrival: ' + str(data1['trainServices'][i]['eta']))
