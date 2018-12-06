@@ -1,19 +1,22 @@
 import json
 from urllib.request import urlopen
+from darwin_token import DARWIN_KEY
 
-jsonToken = '4245c8a6-8a88-4727-9f99-29875e6914b4'
+jsonToken = DARWIN_KEY
 dep_station = 'whs'
 arr_station = 'tth'
 
 time1 = ('1653,1733')
+try:
+    with urlopen("https://huxley.apphb.com/all/" + dep_station + "/to/" + arr_station + "/" + str(time1) + "?accessToken=" + jsonToken) as response:
+        source1 = response.read().decode('utf-8')
 
-with urlopen("https://huxley.apphb.com/all/" + dep_station + "/to/" + arr_station + "/" + str(time1) + "?accessToken=" + jsonToken) as response:
-    source1 = response.read().decode('utf-8')
-# API TOKEN FOR DARWIN: 4245c8a6-8a88-4727-9f99-29875e6914b4
-with urlopen("https://huxley.apphb.com/dep/ecr/to/whs?accessToken=4245c8a6-8a88-4727-9f99-29875e6914b4") as  response:
-    source2 = response.read().decode('utf-8')
-data1 = json.loads(source1) # TTH -> ECR journey loaded as dict
-data2 = json.loads(source2) # ECR -> WHS journey
+    with urlopen("https://huxley.apphb.com/dep/ecr/to/whs?accessToken=" + jsonToken) as  response:
+        source2 = response.read().decode('utf-8')
+    data1 = json.loads(source1) # TTH -> ECR journey loaded as dict
+    data2 = json.loads(source2) # ECR -> WHS journey
+except urllib.error.URLError:
+    print('No data connection')
 # WHS -> TTH rsid: SN324200
 # TODO: Use rsid value to return same journey information
 # print(json.dumps(data1, indent=2))
@@ -38,7 +41,7 @@ except TypeError:
 try:
     print('\nNRCC Messages: ' + str(data1['nrccMessages'][0]['value']))
 except TypeError:
-    print('There is no NRCC data')
+    print('There is no NRCC data currently available')
 
 # origin is a list, not a dict
 # for item in data1:
