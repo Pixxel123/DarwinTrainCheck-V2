@@ -16,7 +16,7 @@ data1 = json.loads(source1) # TTH -> ECR journey loaded as dict
 data2 = json.loads(source2) # ECR -> WHS journey
 # WHS -> TTH rsid: SN324200
 # TODO: Use rsid value to return same journey information
-print(json.dumps(data1, indent=2))
+# print(json.dumps(data1, indent=2))
 
 
 print('Departure Station: ' + str(data1.get('crs')))
@@ -24,16 +24,21 @@ print('Arrival Station: ' + str(data1.get('filtercrs')))
 
 try:
     for i in range(0,len(data1['trainServices'])):
-        print(data1['trainServices'][i]['rsid'])
+        print('Service RSID: ' + str(data1['trainServices'][i]['rsid']))
         print('Scheduled arrival time: ' + str(data1['trainServices'][i]['sta']))
+        if data1['trainServices'][i]['etd'] == 'On time':
+            print('\n')
+        else:
+            print('Status: ' + str(data1['trainServices'][i]['etd']))
         print('Actual arrival time: ' + str(data1['trainServices'][i]['eta']))
-        print('Status: ' + str(data1['trainServices'][i]['etd']))
+        # print('Status: ' + str(data1['trainServices'][i]['etd']))
+        print(data1['trainServices'][i]['origin'])
 except TypeError:
-    print('There is no data')
+    print('There is no train service data')
 try:
     print('\nNRCC Messages: ' + str(data1['nrccMessages'][0]['value']))
 except TypeError:
-    print('There is no data')
+    print('There is no NRCC data')
 
 # origin is a list, not a dict
 # for item in data1:
