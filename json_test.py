@@ -31,7 +31,7 @@ def darwinChecker(departure_station, arrival_station, user_time):
                 for index, service in enumerate(data1['trainServices']):
                     if service['eta'] == '22:54':
                         print(f'this one looks backwards {train_service[index - 1]["sta"]}')
-            # else:
+            # else:git 
             #     print('Status: ' + str(train_service['etd'])
             # print('Status: ' + str(train_service['etd']))
             # print(train_service['origin'])
