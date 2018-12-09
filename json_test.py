@@ -1,60 +1,47 @@
-import json
-from urllib.request import urlopen
+import requests
 from darwin_token import DARWIN_KEY
 
 jsonToken = DARWIN_KEY
-dep_station = 'whs'
-arr_station = 'tth'
 
-time1 = ('1653,1733')
-
-userTime = ['1703','1733']
-
-try:
-    with urlopen("https://huxley.apphb.com/all/" + dep_station + "/to/" + arr_station + "/" + str(time1) + "?accessToken=" + jsonToken) as response:
-        source1 = response.read().decode('utf-8')
-    data1 = json.loads(source1)  # TTH -> ECR journey loaded as dict
-
-    # with urlopen("https://huxley.apphb.com/dep/ecr/to/whs?accessToken=" + jsonToken) as response:
-        # source2 = response.read().decode('utf-8')
-    # data2 = json.loads(source2)  # ECR -> WHS journey
-except urllib.error.URLError as e:
-    ResponseData = e.reason
-    print('No data connection')
-# WHS -> TTH rsid: SN324200
-# TODO: Use rsid value to return same journey information
-# print(json.dumps(data1, indent=2))
+train_station = {'work_station': 'whs', 'home_station': 'bal', 'connect_station': 'clj'}
+user_time = {'morning_time': ['0821', '0853', '2109'], 'evening_time': ['1703', '1733'], 'connect_time': ['0834', '0843']}
 
 
-print('Departure Station: ' + str(data1.get('crs')))
-print('Arrival Station: ' + str(data1.get('filtercrs')))
-print('-' * 30)
+def darwinChecker(departure_station, arrival_station, user_time):
+    response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": jsonToken})
+    response.raise_for_status()    # this makes an error if something failed
+    data1 = response.json()
 
-try:
-    for i in range(0, len(data1['trainServices'])):
-        if data1['trainServices'][i]['sta'].replace(':', '') in userTime:  # replaces sta time with values in userTime
-            print('Service ID: ' + str(data1['trainServices'][i]['serviceID']))
-            print('Service RSID: ' + str(data1['trainServices'][i]['rsid']))
-            print('Scheduled arrival time: ' + str(data1['trainServices'][i]['sta']))
-            print('Actual arrival: ' + str(data1['trainServices'][i]['eta']))
-            print()
-        # if data1['trainServices'][i]['etd'] == 'On time':
-        #     print('')
-        # else:
-        #     print('Status: ' + str(data1['trainServices'][i]['etd']))
-        # print('Status: ' + str(data1['trainServices'][i]['etd']))
-        # print(data1['trainServices'][i]['origin'])
-except TypeError:
-    print('There is no train service data')
-try:
-    print('\nNRCC Messages: ' + str(data1['nrccMessages'][0]['value']))
-except TypeError:
-    print('There is no NRCC data currently available')
+    # WHS -> TTH rsid: SN324200
 
-# origin is a list, not a dict
-# for item in data1:
-    # for data_item in item['data1']:
-        # print(data_item['rsid'])
+    print('Departure Station: ' + str(data1.get('crs')))
+    print('Arrival Station: ' + str(data1.get('filtercrs')))
+    print('-' * 30)
 
-# user_risd = 'SN326500'
+    try:
+        for train_service in data1['trainServices']:
+            if train_service['sta'].replace(':', '') in user_time:  # replaces sta time with values in user_time
+                print('Service ID: ' + str(train_service['serviceID']))
+                print('Service RSID: ' + str(train_service['rsid']))
+                print('Scheduled arrival time: ' + str(train_service['sta']))
+                print('Actual arrival: ' + str(train_service['eta']))
+                print('*' * 20)
+                if train_service['etd'] == 'On time':
+                    print(train_service['serviceID'][train_service] - 1 + ' Testing previous')
+            # else:
+            #     print('Status: ' + str(train_service['etd'])
+            # print('Status: ' + str(train_service['etd']))
+            # print(train_service['origin'])
+    except TypeError:
+        print('There is no train service data')
+    try:
+        print('\nNRCC Messages: ' + str(data1['nrccMessages'][0]['value']))
+    except TypeError:
+        print('There is no NRCC data currently available\n')
 
+
+darwinChecker(train_station['home_station'], train_station['connect_station'], user_time['morning_time'])
+
+darwinChecker(train_station['connect_station'], train_station['work_station'], user_time['connect_time'])
+
+darwinChecker(train_station['work_station'], train_station['home_station'], user_time['evening_time'])
