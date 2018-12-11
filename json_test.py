@@ -3,7 +3,7 @@ from darwin_token import DARWIN_KEY
 
 jsonToken = DARWIN_KEY
 
-train_station = {'work_station': 'whs', 'home_station': 'tth', 'connect_station': 'whs'}
+train_station = {'work_station': 'whs', 'home_station': 'tth', 'connect_station': 'ecr'}
 user_time = {'morning_time': ['0821', '0853', '2147'], 'evening_time': ['1703', '1733'], 'connect_time': ['0834', '0843']}
 
 
@@ -28,7 +28,7 @@ def darwinChecker(departure_station, arrival_station, user_time):
             print('Status: ' + str(train_service[index]['eta']))
             print('*' * 20)
         # for index, service in enumerate(train_service):
-        if service['sta'] == '20:17':
+        if service['eta'] != service['sta']:
             print(f'this is the first one {service["sta"]}')
         if service['rsid'] == 'SN063200':
             # this is the one we want to go back
