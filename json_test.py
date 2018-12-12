@@ -18,7 +18,7 @@ def darwinChecker(departure_station, arrival_station, user_time):
     print('Departure Station: ' + str(data1.get('crs')))
     print('Arrival Station: ' + str(data1.get('filtercrs')))
     print('-' * 40)
-    found_service = 0
+    # found_service = 0
     try:
         for index, service in enumerate(train_service):
             if service['sta'].replace(':', '') in user_time:  # replaces sta time with values in user_time
@@ -28,15 +28,18 @@ def darwinChecker(departure_station, arrival_station, user_time):
                 print('Scheduled departure time: ' + str(train_service[index]['std']))
                 print('Status: ' + str(train_service[index]['eta']))
                 print('-' * 40)
-                found_service += 1
-                print(found_service)
-                return found_service
+                # found_service += 1
+                # print(found_service)
+                # return found_service
                 if service['eta'] == 'Cancelled':
                     # print('The ' + str(train_service[index]['sta']) + ' service is cancelled.')
                     print('Previous train departure time: ' + str(train_service[index - 1]['sta']))
                     print('Previous train status: ' + str(train_service[index - 1]['eta']))
-        if found_service != 1:
-            print('Service check test: ' + found_service)
+            else:
+            	print('Service not in user_time')
+            	break
+        # if found_service != 1:
+        #     print('Service check test: ' + found_service)
         #     print('The services currently available are not specified in user_time.')
     except TypeError:
         print('There is no train service data')
