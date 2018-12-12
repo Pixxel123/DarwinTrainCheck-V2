@@ -1,10 +1,11 @@
 import requests
+import re
 from darwin_token import DARWIN_KEY
 
 jsonToken = DARWIN_KEY
 
 train_station = {'work_station': 'whs', 'home_station': 'tth', 'connect_station': 'ecr'}
-user_time = {'morning_time': ['0821', '0853', '2147'], 'evening_time': ['1733'], 'connect_time': ['0834', '0843']}
+user_time = {'morning_time': ['0821', '0853'], 'evening_time': ['1733'], 'connect_time': ['0834', '0843']}
 
 
 def darwinChecker(departure_station, arrival_station, user_time):
@@ -16,7 +17,8 @@ def darwinChecker(departure_station, arrival_station, user_time):
     # print(type(train_service))
     print('Departure Station: ' + str(data1.get('crs')))
     print('Arrival Station: ' + str(data1.get('filtercrs')))
-    print('-' * 30)
+    print('-' * 40)
+    found_service = 0
     try:
         for index, service in enumerate(train_service):
             if service['sta'].replace(':', '') in user_time:  # replaces sta time with values in user_time
@@ -25,17 +27,24 @@ def darwinChecker(departure_station, arrival_station, user_time):
                 print('Scheduled arrival time: ' + str(train_service[index]['sta']))
                 print('Scheduled departure time: ' + str(train_service[index]['std']))
                 print('Status: ' + str(train_service[index]['eta']))
-                print('*' * 20)
-            # for index, service in enumerate(train_service):
-            # if service['eta'] != service['sta']:
-            #     print(f'this is the first one: {service["sta"]}')
-            if service['eta'] == 'Cancelled':
-                print('The ' + str(train_service[index]['sta']) + ' service is cancelled.')
-                print('Previous train check:' + str(train_service[index-1]["sta"]))
+                print('-' * 40)
+                found_service += 1
+                print(found_service)
+                return found_service
+                if service['eta'] == 'Cancelled':
+                    # print('The ' + str(train_service[index]['sta']) + ' service is cancelled.')
+                    print('Previous train departure time: ' + str(train_service[index - 1]['sta']))
+                    print('Previous train status: ' + str(train_service[index - 1]['eta']))
+        if found_service != 1:
+            print('Service check test: ' + found_service)
+        #     print('The services currently available are not specified in user_time.')
     except TypeError:
         print('There is no train service data')
     try:
-        print('\nNRCC Messages: ' + str(data1['nrccMessages'][0]['value']))
+        # print('\nNRCC Messages: ' + str(data1['nrccMessages'][0]['value']))
+        NRCCRegex = re.compile('^(.*?)[\.!\?](?:\s|$)')  # regex pulls all characters until hitting a . or ! or ?
+        myline = NRCCRegex.search(data1['nrccMessages'][0]['value'])  # regex searches through nrccMessages
+        print('\nNRCC Messages: ' + myline.group(1))  # prints parsed NRCC message
     except TypeError:
         print('There is no NRCC data currently available\n')
 
