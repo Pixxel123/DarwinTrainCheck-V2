@@ -48,9 +48,17 @@ def darwinChecker(departure_station, arrival_station, user_time):
 print('Morning Journey'.center(50, '='))
 darwinChecker(train_station['home_station'], train_station['connect_station'], user_time['morning_time'])
 # schedule.every().day.at("21:50").do()
+# schedule.every(2).seconds.do(darwinChecker,train_station['home_station'], train_station['connect_station'], user_time['morning_time'])
+schedule.every().day.at("07:30").every(5).minutes.do(darwinChecker,train_station['home_station'], train_station['connect_station'], user_time['morning_time'])
 
-print('Connection Journey'.center(50, '='))
-darwinChecker(train_station['connect_station'], train_station['work_station'], user_time['connect_time'])
 
-print('Evening Journey'.center(50, '='))
-darwinChecker(train_station['work_station'], train_station['home_station'], user_time['evening_time'])
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+# print('Connection Journey'.center(50, '='))
+# darwinChecker(train_station['connect_station'], train_station['work_station'], user_time['connect_time'])
+
+# print('Evening Journey'.center(50, '='))
+# darwinChecker(train_station['work_station'], train_station['home_station'], user_time['evening_time'])
