@@ -1,5 +1,7 @@
 import requests
 import re
+import schedule
+import time
 from darwin_token import DARWIN_KEY
 
 jsonToken = DARWIN_KEY
@@ -45,6 +47,7 @@ def darwinChecker(departure_station, arrival_station, user_time):
 
 print('Morning Journey'.center(50, '='))
 darwinChecker(train_station['home_station'], train_station['connect_station'], user_time['morning_time'])
+# schedule.every().day.at("21:50").do()
 
 print('Connection Journey'.center(50, '='))
 darwinChecker(train_station['connect_station'], train_station['work_station'], user_time['connect_time'])
