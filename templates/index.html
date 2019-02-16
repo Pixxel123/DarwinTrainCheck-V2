@@ -1,0 +1,18 @@
+<html>
+	<head>
+		<title>{{ title }} - Darwin Flask Test</title>
+	</head>
+	<body>
+		<!-- <h1 class="departure_test">Departure station: {{ traindata.departure }}</h1>
+		<p>Arrival station: {{ traindata.arrival }}</p> -->
+		<p>{{ traindata }}</p>
+		<p class='journey_info'>{{ traindata.departure }} -> {{ traindata.arrival }}</p>
+		<p class='journey_status'>Journey status: {{ traindata.status }}</p>
+		<p class='train_arrival'>{{ traindata.arrival_time }}</p>
+		<p class='train_status'>{{ traindata.estimated_arrival }}</p>
+		{% if traindata.alternate_service %}
+			<p>{{ traindata.alternate_service }}</p>
+			<p>The previous train arrives at: {{ alternate_status }}</p>
+		{% endif %}
+	</body>
+</html>
