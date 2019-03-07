@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 DARWIN_KEY = str(os.getenv('SECRET_KEY'))
 
-jsonToken = DARWIN_KEY
+# jsonToken = DARWIN_KEY
 
 train_station = {'work_station': 'whs', 'home_station': 'tth', 'connect_station': 'ecr'}
 user_time = {'morning_time': ['0821', '0853','2147'], 'evening_time': ['1733'], 'connect_time': ['0834', '0843']}
@@ -88,7 +88,7 @@ def darwinChecker(departure_station, arrival_station, user_time):
 
 
 def darwin_checker_dict(departure_station, arrival_station, user_time):
-    response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": jsonToken})
+    response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": DARWIN_KEY})
     response.raise_for_status()  # this makes an error if something failed
     data1 = response.json()
     mytrains['departure'] = str(data1['crs'])
