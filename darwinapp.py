@@ -4,9 +4,10 @@ from flask import jsonify
 import json
 import requests
 import re
-from darwin_token import DARWIN_KEY
+import os
 app = Flask(__name__)
 
+os.environ.get('DARWIN_KEY')
 
 jsonToken = DARWIN_KEY
 
