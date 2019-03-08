@@ -1,18 +1,18 @@
 from flask import Flask
 from flask import render_template
-from flask import jsonify
-import json
+# from flask import jsonify
+# import json
 import requests
 import re
 import os
 app = Flask(__name__)
 
-DARWIN_KEY = str(os.getenv('SECRET_KEY'))
+str(os.getenv('SECRET_KEY'))
 
 # jsonToken = DARWIN_KEY
 
 train_station = {'work_station': 'whs', 'home_station': 'tth', 'connect_station': 'ecr'}
-user_time = {'morning_time': ['0821', '0853','2147'], 'evening_time': ['1733'], 'connect_time': ['0834', '0843']}
+user_time = {'morning_time': ['0821', '0853', '2147'], 'evening_time': ['1733'], 'connect_time': ['0834', '0843']}
 
 mytrains = {}
 # def url_request(departure_station, arrival_station, user_time):
@@ -88,7 +88,7 @@ def darwinChecker(departure_station, arrival_station, user_time):
 
 
 def darwin_checker_dict(departure_station, arrival_station, user_time):
-    response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": DARWIN_KEY})
+    response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": SECRET_KEY})
     response.raise_for_status()  # this makes an error if something failed
     data1 = response.json()
     mytrains['departure'] = str(data1['crs'])
