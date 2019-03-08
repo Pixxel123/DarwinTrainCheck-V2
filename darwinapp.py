@@ -7,7 +7,7 @@ import re
 import os
 app = Flask(__name__)
 
-os.getenv('SECRET_KEY')
+os.getenv('SECRET_KEY') = DARWIN_KEY
 
 # jsonToken = DARWIN_KEY
 
@@ -88,7 +88,7 @@ def darwinChecker(departure_station, arrival_station, user_time):
 
 
 def darwin_checker_dict(departure_station, arrival_station, user_time):
-    response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": SECRET_KEY})
+    response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": DARWIN_KEY})
     response.raise_for_status()  # this makes an error if something failed
     data1 = response.json()
     mytrains['departure'] = str(data1['crs'])
