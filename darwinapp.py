@@ -7,7 +7,13 @@ import re
 import os
 app = Flask(__name__)
 
-SECRET_KEY = os.getenv('DARWIN_KEY')
+print ('##########################################')
+# print(SECRET_KEY)
+print(os.environ)
+print(os.environ.get('DARWIN_KEY', 'testing'))
+SECRET_KEY = os.environ.get('DARWIN_KEY', None)
+print(SECRET_KEY)
+print ('##########################################')
 
 # jsonToken = DARWIN_KEY
 
