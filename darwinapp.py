@@ -18,7 +18,7 @@ print ('##########################################')
 # jsonToken = DARWIN_KEY
 
 train_station = {'work_station': 'whs', 'home_station': 'tth', 'connect_station': 'ecr'}
-user_time = {'morning_time': ['0821', '0853', '2147'], 'evening_time': ['1733'], 'connect_time': ['0834', '0843']}
+user_time = {'morning_time': ['0821', '0853', '1517'], 'evening_time': ['1733'], 'connect_time': ['0834', '0843']}
 
 mytrains = {}
 # def url_request(departure_station, arrival_station, user_time):
