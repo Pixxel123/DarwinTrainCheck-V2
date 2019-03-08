@@ -69,30 +69,6 @@ def darwinChecker(departure_station, arrival_station, user_time):
         print('\nThere is no NRCC data currently available\n')
 
 
-# def darwin_checker_formed(departure_station, arrival_station, user_time):
-#     response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": jsonToken})
-#     response.raise_for_status()    # this makes an error if something failed
-#     data1 = response.json()
-#     train_service = data1["trainServices"]
-#     formed_string = '<p>Departure Station: ' + str(data1['crs']) + '</p>\n'
-#     formed_string += '<p>Arrival Station: ' + str(data1['filtercrs']) + '</p>\n'
-#     try:
-#         found_service = 0
-#         for index, service in enumerate(train_service):
-#             if service['sta'].replace(':', '') in user_time:
-#                 found_service += 1
-#                 formed_string += '<p class="serviceID">Service RSID: ' + str(train_service[index]['rsid']) + '</p>\n'
-#                 formed_string += '<p>Scheduled arrival time: ' + str(train_service[index]['sta']) + '</p>\n'
-#                 if service['eta'] == 'Cancelled':
-#                     formed_string += '<p>The ' + str(train_service[index]['sta']) + ' service is cancelled.' + '</p>\n'
-#         if found_service == 0:  # if no service is found
-#             formed_string += '<p>The services currently available are not specified in user_time.' + '</p>\n'
-#     except TypeError:
-#         formed_string += '<p>There is no train service data' + '</p>\n'
-#     text = formed_string.replace('\n', '<br/>')
-#     return text
-
-
 def darwin_checker_dict(departure_station, arrival_station, user_time):
     response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": SECRET_KEY})
     response.raise_for_status()  # this makes an error if something failed
@@ -128,32 +104,10 @@ def darwin_checker_dict(departure_station, arrival_station, user_time):
         return mytrains
 
 
-@app.route('/test21')
+@app.route('/darwincheck')
 def darwin_dict():
     darwin_checker_dict(train_station['home_station'], train_station['connect_station'], user_time['morning_time'])
-    darwin_checker_dict(train_station['connect_station'], train_station['work_station'], user_time['connect_time'])
-    darwin_checker_dict(train_station['work_station'], train_station['connect_station'], user_time['evening_time'])
     return render_template('index.html', traindata=mytrains)
-
-
-# @app.route("/test2")
-# def darwin_page():
-#     journey_info = darwin_checker_formed(train_station['home_station'], train_station['connect_station'], user_time['morning_time'])
-#     journey_info += darwin_checker_formed(train_station['work_station'], train_station['home_station'], user_time['evening_time'])
-#     return journey_info
-
-# @app.route("/test3")
-# def darwin_page2():
-#     return darwin_checker_formed(train_station['work_station'], train_station['home_station'], user_time['evening_time'])
-
-
-# @app.route('/dict-test')
-# def templatetest():
-#     url_request(train_station['connect_station'], train_station['work_station'], user_time['connect_time'])
-#     response = requests.get(url_request)
-#     response.raise_for_status()    # this makes an error if something failed
-#     response.json()
-#     return render_template('index.html', trains=data1)
 
 
 if __name__ == '__main__':
