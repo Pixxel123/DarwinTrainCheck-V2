@@ -111,7 +111,7 @@ def darwin_dict():
 
 
 @app.route('/connection')
-def darwin_dict_connect():
+def darwin_dict():
     darwin_checker_dict(train_station['connect_station'], train_station['work_station'], user_time['connect_time'])
     return render_template('index.html', traindata=mytrains)
 
