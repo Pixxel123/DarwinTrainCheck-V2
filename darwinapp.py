@@ -99,14 +99,20 @@ def darwin_checker_dict(departure_station, arrival_station, user_time):
         NRCCRegex = re.compile('^(.*?)[\.!\?](?:\s|$)')  # regex pulls all characters until hitting a . or ! or ?
         myline = NRCCRegex.search(data1['nrccMessages'][0]['value'])  # regex searches through nrccMessages
         mytrains['nrcc'] = myline.group(1)  # prints parsed NRCC message
-    except (TypeError, AttributeError) as error:  # tuple catches multiple errors, AttributeError for None value
+    except (TypeError) as error:  # tuple catches multiple errors, AttributeError for None value
         mytrains['nrccstate'] = 'There is no NRCC data currently available'
         return mytrains
 
 
-@app.route('/darwincheck')
+@app.route('/morning')
 def darwin_dict():
     darwin_checker_dict(train_station['work_station'], train_station['connect_station'], user_time['evening_time'])
+    return render_template('index.html', traindata=mytrains)
+
+
+@app.route('/connection')
+def darwin_dict2():
+    darwin_checker_dict(train_station['connect_station'], train_station['work_station'], user_time['connect_time'])
     return render_template('index.html', traindata=mytrains)
 
 
