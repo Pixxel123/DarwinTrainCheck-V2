@@ -7,23 +7,23 @@ import re
 import os
 app = Flask(__name__)
 
-print ('##########################################')
+print('##########################################')
 # print(SECRET_KEY)
 print(os.environ)
 print(os.environ.get('DARWIN_KEY', 'testing'))
 SECRET_KEY = os.environ.get('DARWIN_KEY', None)
 print(SECRET_KEY)
-print ('##########################################')
-
+print('##########################################')
 # jsonToken = DARWIN_KEY
 
-train_station = {'work_station': 'whs', 'home_station': 'tth', 'connect_station': 'ecr'}
-user_time = {'morning_time': ['0821', '0853', '1517'], 'evening_time': ['1733'], 'connect_time': ['0834', '0843']}
+train_station = {'work_station': 'whs', 'home_station': 'orp', 'connect_station': 'lbg'}
+user_time = {'morning_time': ['0715', '0720', '1517'], 'evening_time': ['1723'], 'connect_time': ['0817', '0825']}
 
 mytrains = {}
 # def url_request(departure_station, arrival_station, user_time):
 #     url = "https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(user_time), params={"accessToken": jsonToken}
 #     return url
+
 
 @app.route("/")
 @app.route("/home")
@@ -100,7 +100,7 @@ def darwin_checker_dict(departure_station, arrival_station, user_time):
         myline = NRCCRegex.search(data1['nrccMessages'][0]['value'])  # regex searches through nrccMessages
         mytrains['nrcc'] = myline.group(1)  # prints parsed NRCC message
     except (TypeError) as error:  # tuple catches multiple errors, AttributeError for None value
-        mytrains['nrccstate'] = 'There is no NRCC data currently available'
+        mytrains['nrcc'] = 'There is no NRCC data currently available'
         return mytrains
 
 
