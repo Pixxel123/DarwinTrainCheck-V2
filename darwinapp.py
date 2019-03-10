@@ -106,12 +106,12 @@ def darwin_checker_dict(departure_station, arrival_station, user_time):
 
 @app.route('/morning')
 def darwin_dict():
-    darwin_checker_dict(train_station['work_station'], train_station['connect_station'], user_time['evening_time'])
+    darwin_checker_dict(train_station['work_station'], train_station['connect_station'], user_time['morning_time'])
     return render_template('index.html', traindata=mytrains)
 
 
 @app.route('/connection')
-def darwin_dict2():
+def darwin_dict_connect():
     darwin_checker_dict(train_station['connect_station'], train_station['work_station'], user_time['connect_time'])
     return render_template('index.html', traindata=mytrains)
 
