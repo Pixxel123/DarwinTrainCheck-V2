@@ -14,5 +14,8 @@
 			<p>{{ traindata.alternate_service }}</p>
 			<p>The previous train arrives at: {{ alternate_status }}</p>
 		{% endif %}
+		{% if traindata.nrcc %}
+			<p>{{ traindata.nrcc }}</p>
+		{% endif %}
 	</body>
 </html>
