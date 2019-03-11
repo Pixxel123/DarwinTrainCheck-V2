@@ -8,11 +8,11 @@
 		<p>{{ traindata }}</p>
 		<p class='journey_info'>{{ traindata.departure }} -> {{ traindata.arrival }}</p>
 		<p class='journey_status'>Journey status: <span>{{ traindata.status }}</span></p>
-		<p class='train_arrival'>{{ traindata.arrival_time }}</p>
-		<p class='train_status'>{{ traindata.estimated_arrival }}</p>
+		<p class='train_arrival'>Estimated arrival time: <span>{{ traindata.arrival_time }}</span></p>
+		<p class='train_status'>Train status: <span>{{ traindata.estimated_arrival }}</span></p>
 		{% if traindata.alternate_service %}
-			<p>{{ traindata.alternate_service }}</p>
-			<p>The previous train arrives at: {{ alternate_status }}</p>
+			<p>The previous service is: <span>{{ traindata.alternate_service }}</span></p>
+			<p>The previous train arrives at: <span>{{ alternate_status }}</span></p>
 		{% endif %}
 		{% if traindata.nrcc %}
 			<p>{{ traindata.nrcc }}</p>
