@@ -10,7 +10,7 @@
 		<p class='journey_status'>Journey status: <span>{{ traindata.status }}</span></p>
 		<p class='train_arrival'>Estimated arrival time: <span>{{ traindata.arrival_time }}</span></p>
 		<p class='train_status'>Train status: <span>{{ traindata.estimated_arrival }}</span></p>
-		{% if traindata.alternate_service %}
+		{% if traindata.status == 'Cancelled' %}
 			<p>The previous service is: <span>{{ traindata.alternate_service }}</span></p>
 			<p>The previous train arrives at: <span>{{ alternate_status }}</span></p>
 		{% endif %}
