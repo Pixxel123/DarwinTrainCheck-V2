@@ -87,8 +87,8 @@ def darwin_checker_dict(departure_station, arrival_station, user_time):
                 mytrains['status'] = 'On time'
             if mytrains['estimated_arrival'] != 'On time':
                 mytrains['status'] = 'Delayed'
-            elif service['eta'] == 'Cancelled':
-                mytrains['status'] = 'Train cancelled.'
+            if service['eta'] == 'Cancelled':
+                mytrains['status'] = 'Cancelled.'
                 mytrains['alternate_service'] = str(data1['trainServices'][index - 1]['sta'])
                 mytrains['alternate_status'] = str(data1['trainServices'][index - 1]['eta'])
     # if found_service == 0:  # if no service is found
