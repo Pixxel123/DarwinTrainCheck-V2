@@ -118,7 +118,7 @@ def darwin_connect():
 
 @app.route('/evening')
 def darwin_evening():
-    darwin_checker_dict(train_station['work_station'], train_station['connect_station'], user_time['evening_time'])
+    darwin_checker_dict(train_station['home_station'], train_station['connect_station'], user_time['evening_time'])
     return render_template('index.html', traindata=mytrains)
 
 
