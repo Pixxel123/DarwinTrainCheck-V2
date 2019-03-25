@@ -17,7 +17,7 @@ print('##########################################')
 # jsonToken = DARWIN_KEY
 
 train_station = {'work_station': 'whs', 'home_station': 'orp', 'connect_station': 'lbg'}
-user_time = {'morning_time': ['1241'], 'evening_time': ['1333', '1353'], 'connect_time': ['0817', '0825']}
+user_time = {'morning_time': ['1241'], 'evening_time': ['1723', '1733'], 'connect_time': ['0817', '0825']}
 
 mytrains = {}
 
@@ -91,7 +91,10 @@ def darwin_checker(departure_station, arrival_station, query_time):
 def darwin_time(time_of_day):
     global time_trains
     # global sorted_trains
-    time_trains = darwin_checker(train_station['work_station'], train_station['connect_station'], user_time[time_of_day])
+    if time_of_day == 'morning_time':
+        time_trains = darwin_checker(train_station['home_station'], train_station['connect_station'], user_time[time_of_day])
+    if time_of_day == 'evening_time':
+        time_trains = darwin_checker(train_station['work_station'], train_station['connect_station'], user_time[time_of_day])
     # sorted_trains = [train for i, train in time_trains.items() if isinstance(train, dict)]
     return time_trains
 
@@ -106,8 +109,14 @@ def time_trains_location():
     return train_station_data
 
 
-@app.route('/second')
-def page():
+@app.route('/morning')
+def morning_page():
+    darwin_time('morning_time')
+    return render_template('index.html', traindata=darwin_time('morning_time'), trainstation=time_trains_location(), trainservices=time_trains_services())
+
+
+@app.route('/evening')
+def evening_page():
     darwin_time('evening_time')
     return render_template('index.html', traindata=darwin_time('evening_time'), trainstation=time_trains_location(), trainservices=time_trains_services())
 
