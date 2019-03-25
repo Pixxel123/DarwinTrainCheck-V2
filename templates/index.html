@@ -3,19 +3,22 @@
 		<title>{{ title }} - Darwin Flask Test</title>
 	</head>
 	<body>
-		<!-- <h1 class="departure_test">Departure station: {{ traindata.departure }}</h1>
-		<p>Arrival station: {{ traindata.arrival }}</p> -->
 		<p>{{ traindata }}</p>
-		<p class='journey_info'>{{ traindata.departure }} -> {{ traindata.arrival }}</p>
-		<p class='journey_status'>Journey status: <span>{{ traindata.status }}</span></p>
-		<p class='train_arrival'>Estimated arrival time: <span>{{ traindata.arrival_time }}</span></p>
-		<p class='train_status'>Train status: <span>{{ traindata.estimated_arrival }}</span></p>
+		<p>{{ trainstation }}</p>
+		<p>{{ trainstation.departure }} to {{ trainstation.arrival }}</p>
+		<!-- <p>{{ trainservices }}</p> -->
+		{% for services in trainservices %}
+			<!-- <p>{{services.serviceID}}</p> -->
+			<p class='arrival-time'>ETA: <span>{{services.arrival_time}}</span></p>
+			<p class='status'>Status: <span>{{services.status}}</span></p>
+			<!-- <p>{{ trainservices }}</p> -->
+		{% endfor %}
 		{% if traindata.status == 'Cancelled' %}
 			<p>The previous service is: <span>{{ traindata.alternate_service }}</span></p>
 			<p>The previous train arrives at: <span>{{ alternate_status }}</span></p>
 		{% endif %}
-		{% if traindata.nrcc %}
-			<p>{{ traindata.nrcc }}</p>
+		{% if trainstation.nrcc %}
+			<p>{{ trainstation.nrcc }}</p>
 		{% endif %}
 	</body>
 </html>
