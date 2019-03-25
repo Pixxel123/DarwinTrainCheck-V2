@@ -25,6 +25,10 @@ time_trains = {}
 
 time_of_day = 0
 
+train_service_data = {}
+
+train_station_data = {}
+
 
 @app.route("/")
 @app.route("/home")
@@ -100,11 +104,13 @@ def darwin_time(time_of_day):
 
 
 def time_trains_services():
+    global train_service_data
     train_service_data = [j for i, j in time_trains.items() if isinstance(j, dict)]  # grabs train service data into dict
     return train_service_data
 
 
 def time_trains_location():
+    global train_station_data
     train_station_data = {i: j for i, j in time_trains.items() if not isinstance(j, dict)}  # grabs [0] data into separate dict
     return train_station_data
 
@@ -118,7 +124,7 @@ def morning_page():
 @app.route('/evening')
 def evening_page():
     darwin_time('evening_time')
-    return render_template('index.html', trainstation=time_trains_location(), trainservices=time_trains_services())
+    return render_template('index.html', traindata=darwin_time('evening_time'), trainstation=time_trains_location(), trainservices=time_trains_services())
 
 
 if __name__ == '__main__':
