@@ -39,7 +39,7 @@ def hello():
 def darwin_checker(departure_station, arrival_station, query_time):
     # global mytrains  # modifies the global copy of mytrains otherwise a new variable is created
     formatted_times = ",".join(query_time)
-    response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(formatted_times), params={"accessToken": jsonToken})
+    response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(formatted_times), params={"accessToken": SECRET_KEY})
     response.raise_for_status()  # this makes an error if something failed
     data1 = response.json()
     mytrains['departure'] = str(data1['crs'])
