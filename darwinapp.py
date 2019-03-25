@@ -91,9 +91,9 @@ def darwin_checker(departure_station, arrival_station, query_time):
 def darwin_time(time_of_day):
     global time_trains
     # global sorted_trains
-    if time_of_day == 'morning_time':
+    if time_of_day() == 'morning_time':
         time_trains = darwin_checker(train_station['home_station'], train_station['connect_station'], user_time[time_of_day])
-    if time_of_day == 'evening_time':
+    if time_of_day() == 'evening_time':
         time_trains = darwin_checker(train_station['work_station'], train_station['connect_station'], user_time[time_of_day])
     # sorted_trains = [train for i, train in time_trains.items() if isinstance(train, dict)]
     return time_trains
@@ -118,7 +118,7 @@ def morning_page():
 @app.route('/evening')
 def evening_page():
     darwin_time('evening_time')
-    return render_template('index.html', traindata=darwin_time('evening_time'), trainstation=time_trains_location(), trainservices=time_trains_services())
+    return render_template('index.html', trainstation=time_trains_location(), trainservices=time_trains_services())
 
 
 if __name__ == '__main__':
