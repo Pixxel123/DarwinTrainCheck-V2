@@ -11,13 +11,14 @@ print('##########################################')
 # print(SECRET_KEY)
 print(os.environ)
 print(os.environ.get('DARWIN_KEY', 'testing'))
-SECRET_KEY = os.environ.get('DARWIN_KEY', None)
+# SECRET_KEY = os.environ.get('DARWIN_KEY', None)
+SECRET_KEY = '4245c8a6-8a88-4727-9f99-29875e6914b4'
 print(SECRET_KEY)
 print('##########################################')
 # jsonToken = DARWIN_KEY
 
 train_station = {'work_station': 'whs', 'home_station': 'orp', 'connect_station': 'lbg'}
-user_time = {'morning_time': ['1052'], 'evening_time': ['1333', '1353'], 'connect_time': ['0817', '0825']}
+user_time = {'morning_time': ['1052'], 'evening_time': ['1623', '1653'], 'connect_time': ['0817', '0825']}
 
 mytrains = {}
 
@@ -33,10 +34,7 @@ train_station_data = {}
 @app.route("/")
 @app.route("/home")
 def hello():
-    formed_string = '<p>Thing: ' + 'One</p>' + '\n'
-    formed_string += '<p>Thing: ' + 'Two</p>' + '\n'
-    formed_string += '<p>Thing: ' + 'Three</p>' + '\n'
-    text = formed_string.replace('\n', '<br/>')
+    text = 'Flask is up and running!'
     return text
 
 
@@ -54,6 +52,8 @@ def darwin_checker(departure_station, arrival_station, query_time):
             if service['std'].replace(':', '') in formatted_times:
                 found_service += 1
                 new = {}
+                ignore_keys = ['estimated_arrival']
+                {k: v for k, v in new.items() if k not in ignore_keys}
                 new['serviceID'] = str(data1['trainServices'][index]['serviceID'])
                 new['arrival_time'] = str(data1['trainServices'][index]['std'])
                 new['estimated_arrival'] = str(data1['trainServices'][index]['etd'])
