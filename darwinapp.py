@@ -11,7 +11,7 @@ print('##########################################')
 # print(SECRET_KEY)
 print(os.environ)
 print(os.environ.get('DARWIN_KEY', 'testing'))
-# SECRET_KEY = os.environ.get('DARWIN_KEY', None)
+SECRET_KEY = os.environ.get('DARWIN_KEY', None)
 print(SECRET_KEY)
 print('##########################################')
 # jsonToken = DARWIN_KEY
