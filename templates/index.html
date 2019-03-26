@@ -7,20 +7,22 @@
 		<!-- <p>{{ trainstation }}</p> -->
 		<p>{{ trainstation.departure }} to {{ trainstation.arrival }}</p>
 		<p>{{ trainservices }}</p>
-		{% for services in trainservices %}
-			<!-- <p>{{services.serviceID}}</p> -->
-		<ul>
-			<li class='arrival-time'>ETA: <span>{{services.arrival_time}}</span></li>
-			<li class='status'>Status: <span>{{services.status}}</span></li>
-			<!-- <p>{{ trainservices }}</p> -->
-		</ul>
-		{% endfor %}
-		{% if traindata.status == 'Cancelled' %}
-			<p>The previous service is: <span>{{ traindata.alternate_service }}</span></p>
-			<p>The previous train arrives at: <span>{{ alternate_status }}</span></p>
-		{% endif %}
-		{% if trainstation.nrcc %}
-			<p>{{ trainstation.nrcc }}</p>
-		{% endif %}
+		<div class="train_times">
+			{% for services in trainservices %}
+				{% if services.status != 'On time' %}
+					<p>{{services.arrival_time}} -> {{services.estimated_arrival}}</p>
+				{% endif %}
+				{% if services.status == 'On time' %}
+					<p>{{services.arrival_time}} ({{services.status}})</p>
+				{% endif %}
+			{% endfor %}
+			{% if traindata.status == 'Cancelled' %}
+				<p>The previous service is: <span>{{ traindata.alternate_service }}</span></p>
+				<p>The previous train arrives at: <span>{{ alternate_status }}</span></p>
+			{% endif %}
+			{% if trainstation.nrcc %}
+				<p>{{ trainstation.nrcc }}</p>
+			{% endif %}
+		</div>
 	</body>
 </html>

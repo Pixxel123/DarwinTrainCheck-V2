@@ -11,13 +11,13 @@ print('##########################################')
 # print(SECRET_KEY)
 print(os.environ)
 print(os.environ.get('DARWIN_KEY', 'testing'))
-SECRET_KEY = os.environ.get('DARWIN_KEY', None)
+# SECRET_KEY = os.environ.get('DARWIN_KEY', None)
 print(SECRET_KEY)
 print('##########################################')
 # jsonToken = DARWIN_KEY
 
 train_station = {'work_station': 'whs', 'home_station': 'orp', 'connect_station': 'lbg'}
-user_time = {'morning_time': ['1052'], 'evening_time': ['1723', '1733'], 'connect_time': ['0817', '0825']}
+user_time = {'morning_time': ['1052'], 'evening_time': ['1333', '1353'], 'connect_time': ['0817', '0825']}
 
 mytrains = {}
 
@@ -25,8 +25,8 @@ time_trains = {}
 
 time_of_day = 0
 
-train_service_data = {
-}
+train_service_data = {}
+
 train_station_data = {}
 
 
@@ -56,7 +56,7 @@ def darwin_checker(departure_station, arrival_station, query_time):
                 new = {}
                 new['serviceID'] = str(data1['trainServices'][index]['serviceID'])
                 new['arrival_time'] = str(data1['trainServices'][index]['std'])
-                new['estimated_arrival'] = str(data1['trainServices'][index]['eta'])
+                new['estimated_arrival'] = str(data1['trainServices'][index]['etd'])
                 if new['estimated_arrival'] == 'On time':
                     new['status'] = 'On time'
                 if new['estimated_arrival'] != 'On time':
@@ -64,21 +64,21 @@ def darwin_checker(departure_station, arrival_station, query_time):
                 if new['estimated_arrival'] == 'Cancelled':
                     new['status'] = 'Cancelled'
                     new['alternate_service'] = str(data1['trainServices'][index - 1]['std'])
-                    new['alternate_status'] = str(data1['trainServices'][index - 1]['eta'])
+                    new['alternate_status'] = str(data1['trainServices'][index - 1]['etd'])
                 if all([mytrains[i] != new for i in mytrains]):
                     mytrains[index] = new
-                mytrains[index] = {}
-                mytrains[index]['serviceID'] = str(data1['trainServices'][index]['serviceID'])
-                mytrains[index]['arrival_time'] = str(data1['trainServices'][index]['std'])
-                mytrains[index]['estimated_arrival'] = str(data1['trainServices'][index]['eta'])
-                if mytrains[index]['estimated_arrival'] == 'On time':
-                    mytrains[index]['status'] = 'On time'
-                if mytrains[index]['estimated_arrival'] != 'On time':
-                    mytrains[index]['status'] = 'Delayed'
-                if mytrains[index]['estimated_arrival'] == 'Cancelled':
-                    mytrains[index]['status'] = 'Cancelled'
-                    mytrains[index]['alternate_service'] = str(data1['trainServices'][index - 1]['std'])
-                    mytrains[index]['alternate_status'] = str(data1['trainServices'][index - 1]['eta'])
+                    mytrains[index] = {}
+                    mytrains[index]['serviceID'] = str(data1['trainServices'][index]['serviceID'])
+                    mytrains[index]['arrival_time'] = str(data1['trainServices'][index]['std'])
+                    mytrains[index]['estimated_arrival'] = str(data1['trainServices'][index]['etd'])
+                    if mytrains[index]['estimated_arrival'] == 'On time':
+                        mytrains[index]['status'] = 'On time'
+                    if mytrains[index]['estimated_arrival'] != 'On time':
+                        mytrains[index]['status'] = 'Delayed'
+                    if mytrains[index]['estimated_arrival'] == 'Cancelled':
+                        mytrains[index]['status'] = 'Cancelled'
+                        mytrains[index]['alternate_service'] = str(data1['trainServices'][index - 1]['std'])
+                        mytrains[index]['alternate_status'] = str(data1['trainServices'][index - 1]['etd'])
         if found_service == 0:  # if no service is found
             mytrains['state'] = 'The services currently available are not specified in user_time.'
     except (TypeError, AttributeError) as error:
