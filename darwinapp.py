@@ -5,6 +5,7 @@ from flask import render_template
 import requests
 import re
 import os
+from types import SimpleNamespace
 app = Flask(__name__)
 
 print('##########################################')
@@ -17,8 +18,8 @@ print(SECRET_KEY)
 print('##########################################')
 # jsonToken = DARWIN_KEY
 
-train_station = {'work_station': 'whs', 'home_station': 'orp', 'connect_station': 'lbg'}
-user_time = {'morning_time': ['1052'], 'evening_time': ['1623', '1653'], 'connect_time': ['0817', '0825']}
+train_station = {'work_station': 'ecr', 'home_station': 'orp', 'connect_station': 'vic'}
+user_time = {'morning_time': ['1052'], 'evening_time': ['2342', '2345'], 'connect_time': ['0817', '0825']}
 
 mytrains = {}
 
@@ -38,6 +39,61 @@ def hello():
     return text
 
 
+# def darwin_checker(departure_station, arrival_station, query_time):
+#     global mytrains  # modifies the global copy of mytrains otherwise a new variable is created
+#     formatted_times = ",".join(query_time)
+#     response = requests.get("https://huxley.apphb.com/all/" + str(departure_station) + "/to/" + str(arrival_station) + "/" + str(formatted_times), params={"accessToken": SECRET_KEY})
+#     response.raise_for_status()  # this makes an error if something failed
+#     data1 = response.json()
+#     mytrains['departure'] = str(data1['crs'])
+#     mytrains['arrival'] = str(data1['filtercrs'])
+#     try:
+#         found_service = 0
+#         for index, service in enumerate(data1['trainServices']):  # indexes data for pulling of previous values
+#             if service['std'].replace(':', '') in formatted_times:
+#                 found_service += 1
+#                 new = {}  # new catches duplicate data before passing to mytrains
+#                 ignore_keys = ['estimated_arrival']
+#                 {k: v for k, v in new.items() if k not in ignore_keys}
+#                 new['serviceID'] = str(data1['trainServices'][index]['serviceID'])
+#                 new['arrival_time'] = str(data1['trainServices'][index]['std'])
+#                 new['estimated_arrival'] = str(data1['trainServices'][index]['etd'])
+#                 if new['estimated_arrival'] == 'On time':
+#                     new['status'] = 'On time'
+#                 if new['estimated_arrival'] != 'On time':
+#                     new['status'] = 'Delayed'
+#                 if new['estimated_arrival'] == 'Cancelled':
+#                     new['status'] = 'Cancelled'
+#                     new['alternate_service'] = str(data1['trainServices'][index - 1]['std'])
+#                     new['alternate_status'] = str(data1['trainServices'][index - 1]['etd'])
+#                 if all([mytrains[i] != new for i in mytrains]):  # checks if duplicates are in new
+#                     mytrains[index] = new
+#                     mytrains[index] = {}
+#                     mytrains[index]['serviceID'] = str(data1['trainServices'][index]['serviceID'])
+#                     mytrains[index]['arrival_time'] = str(data1['trainServices'][index]['std'])
+#                     mytrains[index]['estimated_arrival'] = str(data1['trainServices'][index]['etd'])
+#                     if mytrains[index]['estimated_arrival'] == 'On time':
+#                         mytrains[index]['status'] = 'On time'
+#                     if mytrains[index]['estimated_arrival'] != 'On time':
+#                         mytrains[index]['status'] = 'Delayed'
+#                     if mytrains[index]['estimated_arrival'] == 'Cancelled':
+#                         mytrains[index]['status'] = 'Cancelled'
+#                         mytrains[index]['alternate_service'] = str(data1['trainServices'][index - 1]['std'])
+#                         mytrains[index]['alternate_status'] = str(data1['trainServices'][index - 1]['etd'])
+#             elif found_service == 0:  # if no service is found
+#                 mytrains['state'] = 'The services currently available are not specified in user_time.'
+#     except (TypeError, AttributeError) as error:
+#         mytrains['errorMessage'] = 'There is no train service data'
+#     try:
+#         NRCCRegex = re.compile('^(.*?)[\.!\?](?:\s|$)')  # regex pulls all characters until hitting a . or ! or ?
+#         myline = NRCCRegex.search(data1['nrccMessages'][0]['value'])  # regex searches through nrccMessages
+#         mytrains['nrcc'] = myline.group(1)  # prints parsed NRCC message
+#     except (TypeError, AttributeError) as error:  # tuple catches multiple errors, AttributeError for None value
+#         mytrains['nrcc'] = 'No NRCC'
+#     return mytrains
+
+
+
 def darwin_checker(departure_station, arrival_station, query_time):
     global mytrains  # modifies the global copy of mytrains otherwise a new variable is created
     formatted_times = ",".join(query_time)
@@ -48,39 +104,29 @@ def darwin_checker(departure_station, arrival_station, query_time):
     mytrains['arrival'] = str(data1['filtercrs'])
     try:
         found_service = 0
-        for index, service in enumerate(data1['trainServices']):
+        for index, service in enumerate(data1['trainServices']):  # indexes data for pulling of previous values
             if service['std'].replace(':', '') in formatted_times:
                 found_service += 1
-                new = {}
-                ignore_keys = ['estimated_arrival']
-                {k: v for k, v in new.items() if k not in ignore_keys}
-                new['serviceID'] = str(data1['trainServices'][index]['serviceID'])
-                new['arrival_time'] = str(data1['trainServices'][index]['std'])
-                new['estimated_arrival'] = str(data1['trainServices'][index]['etd'])
-                if new['estimated_arrival'] == 'On time':
-                    new['status'] = 'On time'
-                if new['estimated_arrival'] != 'On time':
-                    new['status'] = 'Delayed'
-                if new['estimated_arrival'] == 'Cancelled':
-                    new['status'] = 'Cancelled'
-                    new['alternate_service'] = str(data1['trainServices'][index - 1]['std'])
-                    new['alternate_status'] = str(data1['trainServices'][index - 1]['etd'])
-                if all([mytrains[i] != new for i in mytrains]):
-                    mytrains[index] = new
-                    mytrains[index] = {}
-                    mytrains[index]['serviceID'] = str(data1['trainServices'][index]['serviceID'])
-                    mytrains[index]['arrival_time'] = str(data1['trainServices'][index]['std'])
-                    mytrains[index]['estimated_arrival'] = str(data1['trainServices'][index]['etd'])
-                    if mytrains[index]['estimated_arrival'] == 'On time':
-                        mytrains[index]['status'] = 'On time'
-                    if mytrains[index]['estimated_arrival'] != 'On time':
-                        mytrains[index]['status'] = 'Delayed'
-                    if mytrains[index]['estimated_arrival'] == 'Cancelled':
-                        mytrains[index]['status'] = 'Cancelled'
-                        mytrains[index]['alternate_service'] = str(data1['trainServices'][index - 1]['std'])
-                        mytrains[index]['alternate_status'] = str(data1['trainServices'][index - 1]['etd'])
-        if found_service == 0:  # if no service is found
-            mytrains['state'] = 'The services currently available are not specified in user_time.'
+                train = SimpleNamespace(
+                    serviceID=str(service['serviceID']),
+                    arrival_time=str(service['std']),
+                    estimated_arrival=str(service['etd']),
+                    status='On time'
+                )
+                prior_service = data1['trainServices'][index - 1]
+                if train.estimated_arrival == 'Cancelled':
+                    train.status = 'Cancelled'
+                    train.alternate_service = str(prior_service['std'])
+                    train.alternate_status = str(prior_service['etd'])
+                elif train.estimated_arrival != 'On time':
+                    train.status = 'Delayed'
+                write_index = index
+                for i, v in mytrains.items():
+                    if isinstance(v, dict) and v['arrival_time'] == train.arrival_time:
+                        write_index = i
+                mytrains[write_index] = train.__dict__
+            elif found_service == 0:  # if no service is found
+                mytrains['state'] = 'The services currently available are not specified in user_time.'
     except (TypeError, AttributeError) as error:
         mytrains['errorMessage'] = 'There is no train service data'
     try:
@@ -103,13 +149,13 @@ def darwin_time(time_of_day):
     return time_trains
 
 
-def time_trains_services():
+def time_trains_services():  # splits data into train services lookup
     global train_service_data
     train_service_data = [j for i, j in time_trains.items() if isinstance(j, dict)]  # grabs train service data into dict
     return train_service_data
 
 
-def time_trains_location():
+def time_trains_location():  # splits data into crs, filtercrs and nrcc queries
     global train_station_data
     train_station_data = {i: j for i, j in time_trains.items() if not isinstance(j, dict)}  # grabs [0] data into separate dict
     return train_station_data

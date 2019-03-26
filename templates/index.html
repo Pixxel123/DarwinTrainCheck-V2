@@ -6,11 +6,15 @@
 		<!-- <p>{{ traindata }}</p> -->
 		<!-- <p>{{ trainstation }}</p> -->
 		<p>{{ trainstation.departure }} to {{ trainstation.arrival }}</p>
-		<p>{{ trainservices }}</p>
+		<p>{{ traindata }}</p>
+		<!-- <p>{{ trainservices }}</p> -->
 		<div class="train_times">
 			{% for services in trainservices %}
-				{% if services.status != 'On time' %}
+				{% if services.status != 'On time' and services.status != 'Cancelled' %}
 					<p>{{services.arrival_time}} -> {{services.estimated_arrival}}</p>
+					{% if not loop.last %}
+						|
+					{% endif %}
 				{% endif %}
 				{% if services.status == 'On time' %}
 					<p>{{services.arrival_time}} ({{services.status}})</p>
@@ -18,11 +22,11 @@
 						|
 					{% endif %}
 				{% endif %}
+				{% if traindata.status == 'Cancelled' %}
+					<p>The previous service is: <span>{{ trainsevices.alternate_service }}</span></p>
+					<p>The previous train arrives at: <span>{{ alternate_status }}</span></p>
+				{% endif %}
 			{% endfor %}
-			{% if traindata.status == 'Cancelled' %}
-				<p>The previous service is: <span>{{ traindata.alternate_service }}</span></p>
-				<p>The previous train arrives at: <span>{{ alternate_status }}</span></p>
-			{% endif %}
 		</div>
 			{% if trainstation.nrcc %}
 				<p>{{ trainstation.nrcc }}</p>
