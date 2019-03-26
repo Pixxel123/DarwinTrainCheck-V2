@@ -17,7 +17,7 @@ print('##########################################')
 # jsonToken = DARWIN_KEY
 
 train_station = {'work_station': 'whs', 'home_station': 'orp', 'connect_station': 'lbg'}
-user_time = {'morning_time': ['1241'], 'evening_time': ['1723', '1733'], 'connect_time': ['0817', '0825']}
+user_time = {'morning_time': ['1052'], 'evening_time': ['1723', '1733'], 'connect_time': ['0817', '0825']}
 
 mytrains = {}
 
