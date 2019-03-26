@@ -53,18 +53,6 @@ def darwin_checker(departure_station, arrival_station, query_time):
         for index, service in enumerate(data1['trainServices']):
             if service['std'].replace(':', '') in formatted_times:
                 found_service += 1
-                mytrains[index] = {}
-                mytrains[index]['serviceID'] = str(data1['trainServices'][index]['serviceID'])
-                mytrains[index]['arrival_time'] = str(data1['trainServices'][index]['std'])
-                mytrains[index]['estimated_arrival'] = str(data1['trainServices'][index]['eta'])
-                if mytrains[index]['estimated_arrival'] == 'On time':
-                    mytrains[index]['status'] = 'On time'
-                if mytrains[index]['estimated_arrival'] != 'On time':
-                    mytrains[index]['status'] = 'Delayed'
-                if mytrains[index]['estimated_arrival'] == 'Cancelled':
-                    mytrains[index]['status'] = 'Cancelled'
-                    mytrains[index]['alternate_service'] = str(data1['trainServices'][index - 1]['std'])
-                    mytrains[index]['alternate_status'] = str(data1['trainServices'][index - 1]['eta'])
                 new = {}
                 new['serviceID'] = str(data1['trainServices'][index]['serviceID'])
                 new['arrival_time'] = str(data1['trainServices'][index]['std'])
@@ -79,6 +67,18 @@ def darwin_checker(departure_station, arrival_station, query_time):
                     new['alternate_status'] = str(data1['trainServices'][index - 1]['eta'])
                 if all([mytrains[i] != new for i in mytrains]):
                     mytrains[index] = new
+                mytrains[index] = {}
+                mytrains[index]['serviceID'] = str(data1['trainServices'][index]['serviceID'])
+                mytrains[index]['arrival_time'] = str(data1['trainServices'][index]['std'])
+                mytrains[index]['estimated_arrival'] = str(data1['trainServices'][index]['eta'])
+                if mytrains[index]['estimated_arrival'] == 'On time':
+                    mytrains[index]['status'] = 'On time'
+                if mytrains[index]['estimated_arrival'] != 'On time':
+                    mytrains[index]['status'] = 'Delayed'
+                if mytrains[index]['estimated_arrival'] == 'Cancelled':
+                    mytrains[index]['status'] = 'Cancelled'
+                    mytrains[index]['alternate_service'] = str(data1['trainServices'][index - 1]['std'])
+                    mytrains[index]['alternate_status'] = str(data1['trainServices'][index - 1]['eta'])
         if found_service == 0:  # if no service is found
             mytrains['state'] = 'The services currently available are not specified in user_time.'
     except (TypeError, AttributeError) as error:
