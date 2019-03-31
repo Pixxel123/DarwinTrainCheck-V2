@@ -5,8 +5,8 @@
 	<body>
 		<!-- <p>{{ traindata }}</p> -->
 		<!-- <p>{{ trainstation }}</p> -->
-		<p>{{ trainstation.departure }} to {{ trainstation.arrival }}</p>
-		<p>{{ traindata }}</p>
+		<p class="journey_info">{{ trainstation.departure }} to {{ trainstation.arrival }}</p>
+<!-- 	<p>{{ traindata }}</p> -->
 		<!-- <p>{{ trainservices }}</p> -->
 		<div class="train_times">
 			{% for services in trainservices %}
