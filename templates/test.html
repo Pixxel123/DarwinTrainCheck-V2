@@ -4,15 +4,6 @@
 	<title></title>
 </head>
 <body>
-	<p>{{ location_data }}</p>
-	<!-- <p>{{ traindata }}</p> -->
-	<p>{{ trainservice }}</p>
-<!-- 	<div class="train_times">
-		{% for key, item in trainservice.items() %}
-			<p>Service ID: <span>{{ item["serviceID"] }}</span></p>
-			<p>Arrival: {{ item["arrival_time"] }}</p>
-		{% endfor %}
-	</div>  -->
 	<div class="train_times">
 			{% for key, item in trainservice.items() %}
 				{% if item["status"] == 'On time' %}
