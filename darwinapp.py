@@ -33,24 +33,22 @@ def url_parameters():  # defines lookup parameters in URL
 
 def get_services():
     train_services = url_parameters()  # name the returned tuple, train_services[0] = full_data, train_services[1] = mytimes
-    found_service = 0
-    service_times = {}
-    for index, service in enumerate(train_services[0]['trainServices']):
-        service_info = train_services[1]
-        if service['std'].replace(':', '') in service_info:
-            found_service += 1
-            train = SimpleNamespace(
-                serviceID=str(service['serviceID']),
-                arrival_time=str(service['std']),
-                estimated_arrival=str(service['etd']),
-                status='On time')
-            prior_service = train_services[0]['trainServices'][index - 1]
+    service_times = {}  # initialises empty dict
+    for index, service in enumerate(train_services[0]['trainServices']):  # looks through the trainServices json, indexes values for later lookup
+        service_info = train_services[1]  # renames mytimes variable
+        if service['std'].replace(':', '') in service_info:  # looks for 'std' key in json, if matches service_info
+            train = SimpleNamespace(  # initialises train namespace
+                serviceID=str(service['serviceID']),  # serviceID info
+                arrival_time=str(service['std']),  # scheduled departure info
+                estimated_arrival=str(service['etd']),  # estimated departure time
+                status='On time')  # service status
+            prior_service = train_services[0]['trainServices'][index - 1]  # grabs previous indexed data
             if train.estimated_arrival == 'Cancelled':
                 train.status = 'Cancelled'
-                train.alternate_service = str(prior_service['std'])
-                train.alternate_status = str(prior_service['etd'])
-            elif train.estimated_arrival != 'On time':
-                train.status = 'Delayed'
+                train.alternate_service = str(prior_service['std'])  # scheduled departure of previous service
+                train.alternate_status = str(prior_service['etd'])  # estimated departure of previous service
+            elif train.estimated_arrival != 'On time':  # if train arrival not on time
+                train.status = 'Delayed'  # set status to Delayed
             write_index = index
             for items, values in service_times.items():
                 if isinstance(values, dict) and values['arrival_time'] == train.arrival_time:
