@@ -8,7 +8,6 @@ from types import SimpleNamespace
 app = Flask(__name__)
 
 SECRET_KEY = os.environ.get('DARWIN_KEY', None)
-# SECRET_KEY = '4245c8a6-8a88-4727-9f99-29875e6914b4'
 
 # test page to show that Flask is up and running
 
