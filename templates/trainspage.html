@@ -22,7 +22,7 @@
 					<p>{{ item["arrival_time"] }} ({{ item["status"] }})</p>
 					<p>The previous service is: <span>{{ item["alternate_service"] }}</span></p>
 					{% if item["alternate_status"] != 'On time' %}
-						<p>The previous train is: <span>{{ item["alternate_status"] }}</span></p>
+						<p><span>({{ item["alternate_status"] }})</span></p>
 					{% endif %}
 				{% endif %}
 			{% endfor %}
