@@ -60,7 +60,7 @@ def get_services():
 @app.route("/getstatus", methods=["GET"])
 def main_page():
     service_info = get_services()
-    return render_template('test.html', trainservice=service_info)
+    return render_template('trainspage.html', trainservice=service_info)
 
 
 if __name__ == '__main__':
