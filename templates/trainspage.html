@@ -20,7 +20,7 @@
 				{% endif %}
 				{% if item["status"] == 'Cancelled' %}
 					<p>{{ item["arrival_time"] }} ({{ item["status"] }})</p>
-					<p>The previous service is: <span>{{ item["alternate_service"] }}</span></p>
+					<p>Previous service: <span>{{ item["alternate_service"] }}</span></p>
 					{% if item["alternate_status"] != 'On time' %}
 						<p><span>({{ item["alternate_status"] }})</span></p>
 					{% endif %}
